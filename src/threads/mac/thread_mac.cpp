@@ -1,13 +1,11 @@
-#include "common/threads/thread.h"
+#include "threads/thread.h"
 
 #include <pthread.h>
 #include <system_error>
 
 #include <cassert>
 
-#include "CoreLib/Utils/RcvAssert.h"
-
-namespace common::threads
+namespace rcp
 {
     namespace
     {
@@ -43,21 +41,16 @@ namespace common::threads
     {
         void* retval = nullptr;
         [[maybe_unused]] int result = ::pthread_join( m_handle, &retval );
-        
-        RCV_DEBUG_ASSERT( result == 0 );
     }
 
     void Thread::detachImpl()
     {
         [[maybe_unused]] int result = ::pthread_detach( m_handle );
-        
-        RCV_DEBUG_ASSERT( result == 0 );
     }
     
     void Thread::terminateImpl()
     {
         [[maybe_unused]] int result = ::pthread_kill( m_handle, EXIT_FAILURE );
-        RCV_DEBUG_ASSERT( result == 0 );
         
         joinImpl();
     }
@@ -71,4 +64,4 @@ namespace common::threads
         }
     }
 
-} //namespace common::threads
+}
